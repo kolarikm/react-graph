@@ -13,7 +13,7 @@ class BookDetail extends Component {
             refetchQueries: [{ query: getBooksQuery }]
         }).then(() => {
             this.props.handleRemove();
-        });
+        })
     }
     
     displayBookDetails() {
