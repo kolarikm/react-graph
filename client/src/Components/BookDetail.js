@@ -1,17 +1,27 @@
 import React, { Component } from 'react';
-import { graphql } from 'react-apollo';
+import { graphql, compose } from 'react-apollo';
 
-import { getBookQuery } from '../Queries/queries';
+import { getBookQuery, removeBookMutation, getBooksQuery } from '../Queries/queries';
 
 class BookDetail extends Component {
 
+    removeBook() {
+        this.props.removeBookMutation({
+            variables: {
+                id: this.props.bookId
+            },
+            refetchQueries: [{ query: getBooksQuery }]
+        }).then(() => {
+            this.props.handleRemove();
+        });
+    }
+    
     displayBookDetails() {
         const { book } = this.props.data;
-
         if (book) {
             return (
                 <div>
-                    <h2>{book.name}</h2>
+                    <h3 onClick={ this.removeBook.bind(this) }>{book.name}</h3>
                     <p>{book.genre}</p>
                     <p>{book.author.name}</p>
                     <p>Other works: </p>
@@ -22,24 +32,41 @@ class BookDetail extends Component {
                     </ul>
                 </div>
             )
+        } else {
+            return (
+                <div><h3>No book selected</h3></div>
+            )
         }
     }
 
     render() {
         return (
             <div id="book-detail">
+                <br />
                 {this.displayBookDetails()}
             </div>
         );
     }
 }
 
-export default graphql(getBookQuery, {
-    options: (props) => {
-        return {
-            variables: {
-                id: props.bookId
+export default compose(
+    graphql(getBookQuery, {
+        options: (props) => {
+            return {
+                variables: {
+                    id: props.bookId
+                }
             }
         }
-    }
-})(BookDetail);
+    }),
+    graphql(removeBookMutation, {
+        name: "removeBookMutation",
+        options: (props) => {
+            return {
+                variables: {
+                    id: props.bookId
+                }
+            }
+        }
+    })
+)(BookDetail);

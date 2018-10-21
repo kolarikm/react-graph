@@ -26,6 +26,8 @@ class AddBook extends Component {
     submitForm(e) {
         e.preventDefault();
 
+        //TODO: Add validation on fields
+
         this.props.addBookMutation({
             variables: {
                 name: this.state.name,
@@ -35,7 +37,7 @@ class AddBook extends Component {
             refetchQueries: [{ query: getBooksQuery }]
         });
     }
-    
+
     render() {
         return (
             <form id="add-book" onSubmit={ this.submitForm.bind(this) }>
@@ -56,7 +58,8 @@ class AddBook extends Component {
 
                 <div className="field">
                     <label>Author: </label>
-                    <select onChange={ (e) => this.setState({ authorId: e.target.value }) } >
+                    <select value={this.state.authorId} onChange={ (e) => this.setState({ authorId: e.target.value }) } >
+                        <option value="">---</option>
                         {this.displayAuthors()}
                     </select>
                 </div>

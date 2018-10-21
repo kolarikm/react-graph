@@ -8,7 +8,7 @@ const app = express();
 
 app.use(cors());
 
-mongoose.connect('mongodb://michael:iloveArya1@ds223763.mlab.com:23763/kilograms');
+mongoose.connect('mongodb://michael:arya1234@ds237713.mlab.com:37713/cinemaster');
 mongoose.connection.once('open', () => {
     console.log('Connected to DB');
 })

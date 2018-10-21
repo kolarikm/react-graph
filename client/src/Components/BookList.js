@@ -15,12 +15,18 @@ class BookList extends Component {
         }
     }
 
+    handleRemove() {
+        this.setState({ selected: null });
+    }
+
     displayBooks() {
         let data = this.props.data;
 
         if (!data.loading) {
             return data.books.map(book => {
-                return <li key={book.id} onClick={ (e) => {this.setState({ selected: book.id })} }>{book.name}</li>
+                return <div key={book.id} onClick={ (e) => {this.setState({ selected: book.id })} }>
+                    - {book.name}
+                </div>
             })
         }
     }
@@ -28,10 +34,8 @@ class BookList extends Component {
     render() {
         return (
             <div>
-                <ul id="book-list">
-                    {this.displayBooks()}
-                </ul>
-                <BookDetail bookId={this.state.selected}/>
+                {this.displayBooks()}
+                <BookDetail bookId={this.state.selected} handleRemove={ this.handleRemove.bind(this) }/>
             </div>
         );
     }
